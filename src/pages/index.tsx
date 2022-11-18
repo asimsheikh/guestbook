@@ -1,6 +1,30 @@
 import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useState } from "react";
 import { trpc } from "../utils/trpc";
+
+const Form = () => {
+  const [message, setMessage] = useState("");
+  const postMessage = trpc.guestbook.postMessage.useMutation();
+
+  return (
+    <form className="my-4 flex gap-2">
+      <input
+        type="text"
+        value={message}
+        placeholder="your message..."
+        onChange={(event) => setMessage(event.target.value)}
+        className="rounded-md border-2 border-zinc-800 p-2 text-black focus:outline-none"
+      />
+      <button
+        type="submit"
+        className="rounded-md border-2 border-zinc-800 p-2 focus:outline-none"
+      >
+        Submit
+      </button>
+    </form>
+  );
+};
 
 const Messages = () => {
   const { data: messages, isLoading } = trpc.guestbook.getAll.useQuery();
@@ -35,6 +59,7 @@ const Home: NextPage = () => {
       {session ? (
         <>
           <p>hi {session.user?.name}</p>
+          <Form />
           <button onClick={() => signOut()} className="bg-white p-2 text-black">
             Logout
           </button>
