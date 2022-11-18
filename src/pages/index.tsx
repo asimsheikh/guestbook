@@ -5,11 +5,11 @@ const Home: NextPage = () => {
   const { data: session, status } = useSession();
 
   if (status == "loading") {
-    return <main>Loading...</main>;
+    return <main className="flex flex-col items-center pt-4">Loading...</main>;
   }
 
   return (
-    <main className="m-2">
+    <main className="m-2 flex flex-col items-center">
       <h1 className="text-2xl font-bold">Guestbook</h1>
       <div className="m-2"></div>
       {session ? (
