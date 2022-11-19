@@ -16,7 +16,7 @@ export const guestbookRouter = router({
   getAll: publicProcedure.query(async ({ ctx }) => {
     try {
       return await ctx.prisma.guestBook.findMany({
-        select: { name: true, message: true },
+        select: { name: true, message: true, id: true },
         orderBy: { createdAt: "desc" },
       });
     } catch (error) {

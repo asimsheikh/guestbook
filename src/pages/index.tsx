@@ -59,6 +59,7 @@ const Messages = () => {
       {messages?.map((msg, index) => {
         return (
           <div key={index}>
+            <p className="font-bold">{msg.id.slice(4, 4 + 5)}</p>
             <p>{msg.message}</p>
             <span>- {msg.name}</span>
           </div>
