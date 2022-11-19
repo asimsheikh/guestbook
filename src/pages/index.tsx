@@ -3,12 +3,22 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 
-const Form = () => {
+const Form = (props) => {
   const [message, setMessage] = useState("");
   const postMessage = trpc.guestbook.postMessage.useMutation();
 
   return (
-    <form className="my-4 flex gap-2">
+    <form
+      className="my-4 flex gap-2"
+      onSubmit={(event) => {
+        event.preventDefault();
+        postMessage.mutate({
+          name: props.session.user?.name as string,
+          message,
+        });
+        setMessage("");
+      }}
+    >
       <input
         type="text"
         value={message}
@@ -59,10 +69,12 @@ const Home: NextPage = () => {
       {session ? (
         <>
           <p>hi {session.user?.name}</p>
-          <Form />
           <button onClick={() => signOut()} className="bg-white p-2 text-black">
             Logout
           </button>
+          <div className="pt-6">
+            <Form session={session} />
+          </div>
         </>
       ) : (
         <button
