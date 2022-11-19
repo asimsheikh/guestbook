@@ -5,7 +5,20 @@ import { trpc } from "../utils/trpc";
 
 const Form = (props) => {
   const [message, setMessage] = useState("");
-  const postMessage = trpc.guestbook.postMessage.useMutation();
+  const utils = trpc.useContext();
+  const postMessage = trpc.guestbook.postMessage.useMutation({
+    onMutate: () => {
+      utils.guestbook.getAll.cancel();
+      const optimisticUpdate = utils.guestbook.getAll.getData();
+
+      if (optimisticUpdate) {
+        utils.guestbook.getAll.setData(optimisticUpdate);
+      }
+    },
+    onSettled: () => {
+      utils.guestbook.getAll.invalidate();
+    },
+  });
 
   return (
     <form
