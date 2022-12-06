@@ -23,7 +23,7 @@ const Home: NextPage = (props) => {
 export async function getStaticProps() {
   const filePath = path.join(process.cwd(), "db.json");
   const data = await fs.readFile(filePath);
-  const jsonData = JSON.parse(data);
+  const jsonData = JSON.parse(data.toString());
 
   return {
     props: { data: jsonData },
